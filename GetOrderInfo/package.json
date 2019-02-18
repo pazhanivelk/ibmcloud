@@ -11,6 +11,7 @@
     "serverless-openwhisk": ">=0.13.0"
   },
   "dependencies": {
-    "@cloudant/cloudant": "^3.0.2"
+    "@cloudant/cloudant": "^3.0.2",
+    "nano": "^8.0.0"
   }
 }
