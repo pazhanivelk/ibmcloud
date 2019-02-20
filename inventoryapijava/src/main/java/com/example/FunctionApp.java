@@ -43,6 +43,7 @@ public class FunctionApp {
     		response.addProperty("response", generic.getText());
     		
     	}
+    	//response.addProperty("messageContext", responseMsg.getContext());
     }
     catch(Exception ex) {
     	ex.printStackTrace();

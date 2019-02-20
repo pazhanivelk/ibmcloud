@@ -12,10 +12,17 @@
  */
 package com.example.watson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ibm.watson.developer_cloud.assistant.v2.Assistant;
 import com.ibm.watson.developer_cloud.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContext;
+import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContextGlobal;
+import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContextGlobalSystem;
+import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContextSkills;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageInput;
+import com.ibm.watson.developer_cloud.assistant.v2.model.MessageInputOptions;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageOptions;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageResponse;
 import com.ibm.watson.developer_cloud.assistant.v2.model.SessionResponse;
@@ -35,7 +42,8 @@ public class WatsonHelper {
 	SessionResponse sresponse = null;
 	MessageContext context = null;
 	
-	final String ASSISTANT_ID = "660019c9-f2c4-49ef-9416-3f79e9c8aa3f";
+	final String ASSISTANT_ID = "e4d12fb1-b2b3-45f0-838a-df2cb7ac8d8a";
+	
 
 	public MessageResponse message(String inputMsg) throws Exception {
 
@@ -44,19 +52,37 @@ public class WatsonHelper {
 			System.out.println("Service is nulll *********************************");
 			init();
 		}
+		MessageInputOptions inputOptions = new MessageInputOptions();
+	    inputOptions.setReturnContext(true);
 		MessageInput.Builder builder = new MessageInput.Builder().messageType("text").text(inputMsg);
-		MessageInput input = builder.build();
+		MessageInput input = builder.options(inputOptions).build();
+		
+		// create global context with user ID
+	    MessageContextGlobalSystem system = new MessageContextGlobalSystem();
+	    system.setUserId("my_user_id");
+	    MessageContextGlobal globalContext = new MessageContextGlobal();
+	    globalContext.setSystem(system);
+
+	    // build user-defined context variables, put in skill-specific context for main skill
+	    Map<String, String> userDefinedContext = new HashMap<>();
+	    userDefinedContext.put("account_num","123456");
+	    Map<String, Map> mainSkillContext = new HashMap<>();
+	    mainSkillContext.put("user_defined", userDefinedContext);
+	    MessageContextSkills skillsContext = new MessageContextSkills();
+	    skillsContext.put("main skill", mainSkillContext);
+
+	    MessageContext context = new MessageContext();
+	    context.setGlobal(globalContext);
+	    context.setSkills(skillsContext);
+
+		
 
 		MessageOptions.Builder messageOptionsBuilder = new MessageOptions.Builder();
 		
 		messageOptionsBuilder = messageOptionsBuilder.assistantId(ASSISTANT_ID);
 		messageOptionsBuilder = messageOptionsBuilder.sessionId(sresponse.getSessionId());
-		if (context != null) {
-			System.out.println("COntext *****************"+ context.toString());
-			messageOptionsBuilder = messageOptionsBuilder.context(context);
-		}
+		messageOptionsBuilder = messageOptionsBuilder.context(context);
 		MessageOptions options = messageOptionsBuilder.input(input).build();
-
 		// sync
 		MessageResponse response = service.message(options).execute();
 		context = response.getContext();
@@ -68,9 +94,9 @@ public class WatsonHelper {
 	}
 
 	public void init() {
-		iamOptions = new IamOptions.Builder().apiKey("sm2Trx14ybklxGiW-xxH86-EnPEUhGWJxqvjTRUpSjB4").build();
+		iamOptions = new IamOptions.Builder().apiKey("hWkKSgKBU3Cz5ObICTgdChNvQIfNBYq2TtXfQdgLp_vh").build();
 		service = new Assistant("2018-02-16", iamOptions);
-		service.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
+		service.setEndPoint("https://gateway-lon.watsonplatform.net/assistant/api");
 		CreateSessionOptions soptions = new CreateSessionOptions.Builder(ASSISTANT_ID)
 				.build();
 		sresponse = service.createSession(soptions).execute();
