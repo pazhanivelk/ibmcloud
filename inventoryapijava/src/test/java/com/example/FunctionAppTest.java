@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
@@ -30,13 +31,21 @@ public class FunctionAppTest {
   public void testFunction() {
 
 	
-		
+	Gson gson = new Gson();
     JsonObject args = new JsonObject();
-    args.addProperty("input", "Yes");
+    args.addProperty("input", "Want to make order");
     JsonObject response = FunctionApp.main(args);
+    
+    System.out.println("response from watson "+gson.toJson(response));
+    args.add("messageContext", response.get("context"));
+    args.addProperty("input", "Bricks");
+    args.addProperty("sessionId", response.get("sessionId").getAsString());
+    
+    response = FunctionApp.main(args);
+    System.out.println("response from watson "+gson.toJson(response));
+    
     assertNotNull(response);
-    String greetings = response.getAsJsonPrimitive("response").getAsString();
-    assertNotNull(greetings);
+
     
 
   }

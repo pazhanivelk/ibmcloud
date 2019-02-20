@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.watson.WatsonHelper;
+import com.google.gson.Gson;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -20,7 +21,7 @@ import com.example.watson.WatsonHelper;
  */
 
 import com.google.gson.JsonObject;
-import com.ibm.watson.developer_cloud.assistant.v2.model.DialogRuntimeResponseGeneric;
+import com.google.gson.JsonParser;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageResponse;
 
 /**
@@ -32,22 +33,26 @@ import com.ibm.watson.developer_cloud.assistant.v2.model.MessageResponse;
 public class FunctionApp {
   public static JsonObject main(JsonObject args) {
 	  
-    JsonObject response = new JsonObject();
     
     WatsonHelper helper = new WatsonHelper();
-    String input = args.get("input").toString();
+    
+    
     try {
-    	MessageResponse responseMsg = helper.message(input);
-    	for ( DialogRuntimeResponseGeneric generic : responseMsg.getOutput().getGeneric()) {
+    	Gson gson = new Gson();
+    	MessageResponse responseMsg = helper.message(args);
+    	
     		
-    		response.addProperty("response", generic.getText());
-    		
-    	}
-    	//response.addProperty("messageContext", responseMsg.getContext());
+   		
+    	
+    	
+    	String responseStr = gson.toJson(responseMsg);
+    	JsonObject responseJson = new JsonParser().parse(responseStr).getAsJsonObject();
+    	responseJson.addProperty("sessionId", helper.getSessionId());
+    	return responseJson;
     }
     catch(Exception ex) {
     	ex.printStackTrace();
     }
-    return response;
+    return null;
   }
 }
