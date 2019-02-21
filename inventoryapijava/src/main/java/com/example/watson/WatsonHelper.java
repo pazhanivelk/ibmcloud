@@ -15,6 +15,8 @@ package com.example.watson;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.gson.JsonObject;
 import com.ibm.watson.developer_cloud.assistant.v2.Assistant;
 import com.ibm.watson.developer_cloud.assistant.v2.model.CreateSessionOptions;
@@ -58,7 +60,7 @@ public class WatsonHelper {
 		CreateSessionOptions soptions = new CreateSessionOptions.Builder(ASSISTANT_ID)
 				.build();
 		
-		if (inputMsg.get("sessionId") == null) {
+		if (inputMsg.get("sessionId") == null || StringUtils.isBlank(inputMsg.get("sessionId").getAsString())) {
 			sresponse = service.createSession(soptions).execute();
 			sessionId = sresponse.getSessionId();
 		}

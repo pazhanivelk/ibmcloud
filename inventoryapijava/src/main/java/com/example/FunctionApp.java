@@ -39,6 +39,7 @@ public class FunctionApp {
     
     try {
     	Gson gson = new Gson();
+    	System.out.println("############### args"+ args);
     	MessageResponse responseMsg = helper.message(args);
     	
     		
