@@ -12,18 +12,23 @@
  */
 package com.example.watson;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.example.db.DBUtils;
 import com.google.gson.JsonObject;
 import com.ibm.watson.developer_cloud.assistant.v2.Assistant;
 import com.ibm.watson.developer_cloud.assistant.v2.model.CreateSessionOptions;
+import com.ibm.watson.developer_cloud.assistant.v2.model.DialogNodeAction;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContext;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContextGlobal;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContextGlobalSystem;
-import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContextSkills;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageInput;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageInputOptions;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageOptions;
@@ -45,7 +50,23 @@ public class WatsonHelper {
 	SessionResponse sresponse = null;
 	MessageContext context = null;
 	
-	final String ASSISTANT_ID = "e4d12fb1-b2b3-45f0-838a-df2cb7ac8d8a";
+	
+	
+	private String ASSISTANT_ID;
+	private String url ;
+	private String apiKey;
+	
+	private final List<String> dbfields;  
+	
+	public WatsonHelper(String aSSISTANT_ID, String url, String apiKey) {
+		super();
+		ASSISTANT_ID = aSSISTANT_ID;
+		this.url = url;
+		this.apiKey = apiKey;
+		dbfields = Arrays.asList("order_id","product_id","quantity","order_status","delivery_status","payment_status","delivery_date","email_addr","phonenumber","address","payment_type","card_number","cvv","bank_name","card_type","product_name", "amount");
+		
+	}
+
 	String sessionId = "";
 
 	public MessageResponse message(JsonObject inputMsg) throws Exception {
@@ -82,6 +103,8 @@ public class WatsonHelper {
 		// sync
 		MessageResponse response = service.message(options).execute();
 		context = response.getContext();
+		processResponse(response);
+		
 		System.out.println("COntext ***from response **************"+ context);
 
 		System.out.println(response);
@@ -89,6 +112,52 @@ public class WatsonHelper {
 
 	}
 	
+	private void processResponse(MessageResponse response) throws Exception{
+		if (response.getOutput().getActions() == null || response.getOutput().getActions().isEmpty() ) {
+			return;
+		}
+		DBUtils dbUtils = new DBUtils();
+		DialogNodeAction action = response.getOutput().getActions().get(0);
+		String actionName = action.getName();
+		MessageContext context = response.getContext();
+		Map mainSkills  = (Map)context.getSkills().get("main skill");
+		Map<String, Object> userDefinedData = (Map<String, Object>)mainSkills.get("user_defined");
+		Map<String, String > orderData = userDefinedData.entrySet().stream().
+				filter(e -> dbfields.contains(e.getKey()) && e.getValue() != null).
+				collect(Collectors.toMap(Map.Entry :: getKey, v ->  v.getValue().toString() ));
+		
+		switch(actionName) {
+		
+			case  "cancelOrder":
+				orderData.put("order_status", "CANCELLED");
+				userDefinedData.put("finalstatus", "success");
+				dbUtils.updateOrderData(orderData);
+				break;
+			case "returnOrder":
+				orderData.put("order_status", "RETURNED");
+				userDefinedData.put("finalstatus", "success");
+				dbUtils.updateOrderData(orderData);
+				break;
+			case "saveOrder":
+				String orderId = dbUtils.getNextOrdeID();
+				orderData.put("order_status", "FULFILLMENT");
+				userDefinedData.put("order_id", "orderId");
+				orderData.put("order_id", orderId);
+				dbUtils.insertOrderData(orderData);
+				break;
+			case "updatePayment":
+				orderData.put("payment_status", "PAID");
+				userDefinedData.put("finalstatus", "success");
+				dbUtils.updateOrderData(orderData);
+				break;
+			case "getOrderStatus":
+				String orderStatus = dbUtils.getNextOrderStatus(orderData.get("order_id"));
+				userDefinedData.put("finalstatus", orderStatus);
+				break;
+		}
+		
+	}
+
 	public MessageContext getMessageContext(JsonObject inputArgs) {
 		JsonObject messageContext = null;
 		
@@ -115,6 +184,8 @@ public class WatsonHelper {
 	    system.setTurnCount(systemObj.get("turn_count").getAsLong());
 	    MessageContextGlobal globalContext = new MessageContextGlobal();
 	    globalContext.setSystem(system);
+	    
+	    
 
 	    
 
@@ -124,9 +195,9 @@ public class WatsonHelper {
 	}
 
 	public void init() {
-		iamOptions = new IamOptions.Builder().apiKey("hWkKSgKBU3Cz5ObICTgdChNvQIfNBYq2TtXfQdgLp_vh").build();
+		iamOptions = new IamOptions.Builder().apiKey(apiKey).build();
 		service = new Assistant("2018-02-16", iamOptions);
-		service.setEndPoint("https://gateway-lon.watsonplatform.net/assistant/api");
+		service.setEndPoint(url);
 
 	}
 	

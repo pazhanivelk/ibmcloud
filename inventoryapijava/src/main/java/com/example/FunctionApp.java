@@ -34,18 +34,13 @@ public class FunctionApp {
   public static JsonObject main(JsonObject args) {
 	  
     
-    WatsonHelper helper = new WatsonHelper();
+    WatsonHelper helper = new WatsonHelper(args.get("assistantId").getAsString(),args.get("url").getAsString(), args.get("apikey").getAsString() );
     
     
     try {
     	Gson gson = new Gson();
     	System.out.println("############### args"+ args);
     	MessageResponse responseMsg = helper.message(args);
-    	
-    		
-   		
-    	
-    	
     	String responseStr = gson.toJson(responseMsg);
     	JsonObject responseJson = new JsonParser().parse(responseStr).getAsJsonObject();
     	responseJson.addProperty("sessionId", helper.getSessionId());
