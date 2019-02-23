@@ -42,7 +42,7 @@ public class WatsonHelper {
 	SessionResponse sresponse = null;
 	MessageContext context = null;
 	
-	final String ASSISTANT_ID = "e4d12fb1-b2b3-45f0-838a-df2cb7ac8d8a";
+	final String ASSISTANT_ID = "2131796c-7457-4f05-b07a-d25424297e66";
 	
 
 	public MessageResponse message(String inputMsg) throws Exception {
@@ -94,9 +94,9 @@ public class WatsonHelper {
 	}
 
 	public void init() {
-		iamOptions = new IamOptions.Builder().apiKey("hWkKSgKBU3Cz5ObICTgdChNvQIfNBYq2TtXfQdgLp_vh").build();
+		iamOptions = new IamOptions.Builder().apiKey("sm2Trx14ybklxGiW-xxH86-EnPEUhGWJxqvjTRUpSjB4").build();
 		service = new Assistant("2018-02-16", iamOptions);
-		service.setEndPoint("https://gateway-lon.watsonplatform.net/assistant/api");
+		service.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
 		CreateSessionOptions soptions = new CreateSessionOptions.Builder(ASSISTANT_ID)
 				.build();
 		sresponse = service.createSession(soptions).execute();
