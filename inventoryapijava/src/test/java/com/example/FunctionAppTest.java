@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
  */
 public class FunctionAppTest {
   @Test
-  
+  @Ignore
   public void testFunction() {
 
 	
