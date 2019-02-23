@@ -7,9 +7,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class DBUtils {
 	
@@ -72,6 +75,71 @@ public class DBUtils {
 		}
 		return returnData;
 	}
+	
+	
+	public void insertOrderData(Map<String, String> orderData) throws Exception  {
+		
+		String sql = "insert into order_details(%s) values (%s)";
+		
+		List<String> valuesList = new ArrayList<>();
+		for (String value:orderData.values()) {
+			valuesList.add("'"+value+"'" );
+		}
+		String values = String.join(",",  valuesList);
+		
+		String columnNames = String.join(",", orderData.keySet());
+		
+		sql = String.format(sql, columnNames, values);
+		
+		executeUpdateOrInsert(sql);
+		
+	}
+	
+	public void updateOrderData(Map<String, String> orderData) throws Exception  {
+		
+		String sql = "update order_details set ";
+		
+		String sql1 = orderData.keySet().stream().map(k -> {
+			return k + " = " + orderData.get(k);
+		}).collect(Collectors.joining());
+		
+		sql = sql1 + " where order_id = '"+orderData.get("order_id") +"' "; 
+		executeUpdateOrInsert(sql);
+	}
+
+
+	private void executeUpdateOrInsert(String sql) throws Exception  {
+		Connection conn = null;
+		
+		Statement statement = null;
+		
+		ResultSet rs = null;
+		try {
+			conn = getDBConnection();
+			statement = conn.createStatement();
+			System.out.println(" sql ***************"+ sql);
+			rs = statement.executeQuery(sql);
+		}catch(Exception ex) {
+			throw ex;
+		}
+		finally {
+			try {
+				if(rs != null ) {
+					rs.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	
 
