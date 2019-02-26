@@ -147,7 +147,6 @@ public class WatsonHelper {
 		String responseStr = null;
 		if (responseMap.get("response") != null) {
 			responseStr = responseMap.get("response").toString();
-			responseMap.put("response",response);
 		}
 		switch(actionName) {
 			
@@ -174,6 +173,7 @@ public class WatsonHelper {
 				orderData.put("order_id", orderId);
 				if (responseStr != null) {
 					responseStr=responseStr.replace("order_id", orderId );
+					responseMap.put("response",responseStr);	
 				}
 				dbUtils.insertOrderData(orderData);
 				break;
