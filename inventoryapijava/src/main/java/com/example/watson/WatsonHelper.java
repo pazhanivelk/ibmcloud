@@ -121,6 +121,7 @@ public class WatsonHelper {
 				int i = 1;
 				for(DialogNodeOutputOptionsElement element:outputOptions) {
 					returnString = returnString + "\t" + i + ":" + element.getValue().getInput().text() +"\n";
+					i=i+1;
 					
 				}
 
@@ -146,6 +147,7 @@ public class WatsonHelper {
 		String responseStr = null;
 		if (responseMap.get("response") != null) {
 			responseStr = responseMap.get("response").toString();
+			responseMap.put("response",response);
 		}
 		switch(actionName) {
 			
@@ -171,7 +173,7 @@ public class WatsonHelper {
 				userDefinedData.put("order_id", orderId);
 				orderData.put("order_id", orderId);
 				if (responseStr != null) {
-					responseStr.replace("$order_id", orderId );
+					responseStr=responseStr.replace("order_id", orderId );
 				}
 				dbUtils.insertOrderData(orderData);
 				break;
