@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
  */
 public class FunctionAppTest {
   @Test
-  	@Ignore
+  @Ignore
   public void testFunction() {
 
 	
@@ -44,7 +44,7 @@ public class FunctionAppTest {
     
     System.out.println("response from watson "+gson.toJson(response));
     args.add("messageContext", response.get("context"));
-    args.addProperty("input", "Bricks");
+    args.addProperty("input", "Dalmia FBC cement");
     args.addProperty("sessionId", response.get("sessionId").getAsString());
     
     response = FunctionApp.main(args);
@@ -53,11 +53,11 @@ public class FunctionAppTest {
     args.addProperty("sessionId", response.get("sessionId").getAsString());
     response = FunctionApp.main(args);
     System.out.println("response from watson "+gson.toJson(response));
-    args.addProperty("input", "23 main street,chennai - 600010");
+    args.addProperty("input", "East");
     args.addProperty("sessionId", response.get("sessionId").getAsString());
     response = FunctionApp.main(args);
     System.out.println("response from watson "+gson.toJson(response));
-    args.addProperty("input", "4");
+    args.addProperty("input", "West Bengal-700107");
     args.addProperty("sessionId", response.get("sessionId").getAsString());
     response = FunctionApp.main(args);
     System.out.println("response from watson "+gson.toJson(response));
@@ -72,7 +72,7 @@ public class FunctionAppTest {
     response = FunctionApp.main(args);
     System.out.println("response from watson "+gson.toJson(response));
     
-    args.addProperty("input", "Credit Card");
+    /*args.addProperty("input", "Credit Card");
     args.addProperty("sessionId", response.get("sessionId").getAsString());
     response = FunctionApp.main(args);
     System.out.println("response from watson "+gson.toJson(response));
@@ -89,14 +89,35 @@ public class FunctionAppTest {
     args.addProperty("input", "434444");
     args.addProperty("sessionId", response.get("sessionId").getAsString());
     response = FunctionApp.main(args);
-    System.out.println("response from watson "+gson.toJson(response));
+    System.out.println("response from watson "+gson.toJson(response));*/
     assertNotNull(response);
 
     
 
   }
   
-  
+
+
+  @Test
+  @Ignore
+  public void testORderStatus(){
+      Gson gson = new Gson();
+      JsonObject args = new JsonObject();
+      args.addProperty("input", "Order Status");
+      args.addProperty("assistantId", "2131796c-7457-4f05-b07a-d25424297e66");
+      args.addProperty("url", "https://gateway.watsonplatform.net/assistant/api/");
+      args.addProperty("apikey", "sm2Trx14ybklxGiW-xxH86-EnPEUhGWJxqvjTRUpSjB4");
+
+      JsonObject response = FunctionApp.main(args);
+
+      System.out.println("response from watson "+gson.toJson(response));
+      args.add("messageContext", response.get("context"));
+      args.addProperty("input", "100057");
+      args.addProperty("sessionId", response.get("sessionId").getAsString());
+
+      response = FunctionApp.main(args);
+      System.out.println("response from watson "+gson.toJson(response));
+  }
   @Test
   @Ignore
   public void testReturn() {

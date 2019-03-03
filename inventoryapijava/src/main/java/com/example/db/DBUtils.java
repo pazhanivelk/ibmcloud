@@ -104,7 +104,7 @@ public class DBUtils {
 		try {
 			conn = getDBConnection();
 			statement = conn.createStatement();
-			rs = statement.executeQuery("select max(order_id) ORDER_ID from order_details ");
+			rs = statement.executeQuery("select max(order_id) ORDER_ID from ORDERDETAILS ");
 			if (rs.next()) {
 				order_id = rs.getString("ORDER_ID");
 				if (order_id == null || order_id.equals("")) {
@@ -151,7 +151,7 @@ public class DBUtils {
 		try {
 			conn = getDBConnection();
 			statement = conn.createStatement();
-			rs = statement.executeQuery("select ORDER_ID,PRODUCT_ID,PRODUCT_NAME,QUANTITY,ADDRESS,PHONENUMBER from order_details where order_id=" + orderId );
+			rs = statement.executeQuery("select ORDER_ID,PRODUCT_ID,PRODUCT_NAME,QUANTITY,ADDRESS,DELIVERY_DATE,PHONENUMBER from ORDERDETAILS where order_id='" + orderId+"'" );
 			if (rs.next()) {
 				str = "Order ID : "  +  rs.getString("ORDER_ID") + "\n";
 				str =  str +  "Product ID: " + rs.getString("product_id");
@@ -187,7 +187,7 @@ public class DBUtils {
 	
 	public void insertOrderData(Map<String, String> orderData) throws Exception  {
 		
-		String sql = "insert into order_details(%s) values (%s)";
+		String sql = "insert into ORDERDETAILS(%s) values (%s)";
 		
 		List<String> valuesList = new ArrayList<>();
 		for (String value:orderData.values()) {
@@ -205,7 +205,7 @@ public class DBUtils {
 	
 	public void updateOrderData(Map<String, String> orderData) throws Exception  {
 		
-		String sql = "update order_details set ";
+		String sql = "update ORDERDETAILS set ";
 		boolean isFirst = true;
 		for (String key:orderData.keySet()) {
 			if (key.equals("order_id")) {

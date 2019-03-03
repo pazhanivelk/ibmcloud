@@ -141,6 +141,7 @@ public class WatsonHelper {
 		MessageContext context = response.getContext();
 		Map mainSkills  = (Map)context.getSkills().get("main skill");
 		Map<String, Object> userDefinedData = (Map<String, Object>)mainSkills.get("user_defined");
+		System.out.println("USer Defined Dat a ...... " + userDefinedData);
 		Map<String, String > orderData = userDefinedData.entrySet().stream().
 				filter(e -> dbfields.contains(e.getKey()) && e.getValue() != null).
 				collect(Collectors.toMap(Map.Entry :: getKey, v ->  v.getValue().toString() ));
@@ -183,6 +184,7 @@ public class WatsonHelper {
 				dbUtils.updateOrderData(orderData);
 				break;
 			case "getOrderStatus":
+
 				String orderStatus = dbUtils.getNextOrderStatus(orderData.get("str"));
 				userDefinedData.put("$finalstatus", orderStatus);
 				if (responseStr != null) {
