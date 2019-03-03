@@ -141,7 +141,6 @@ public class DBUtils {
 	}
 	
 	public String getNextOrderStatus(String orderId) throws Exception  {
-		String a[]=new String[7];
 		String str="";
 				
 		Connection conn = null;
@@ -152,16 +151,16 @@ public class DBUtils {
 		try {
 			conn = getDBConnection();
 			statement = conn.createStatement();
-			rs = statement.executeQuery("select order_id,product_id,product_name,quantity,address,delivery_date,phonenumber from order_details where order_id='" + orderId + "'");
+			rs = statement.executeQuery("select ORDER_ID,PRODUCT_ID,PRODUCT_NAME,QUANTITY,ADDRESS,DELIVERY_DATE,PHONENUMBER from order_details where order_id='" + orderId + "'");
 			if (rs.next()) {
-				a[0]= rs.getString("order_id");
-				a[1]= rs.getString("product_id");
-				a[3] = rs.getString("product_name");
-				a[4] = rs.getString("quantity");
-				a[5] = rs.getString("address");
-				a[6] = rs.getString("delivery_date ");
-				a[7] = rs.getString("phonenumber");	
-				str=a.toString();
+				str = "Order ID : "  +  rs.getString("ORDER_ID") + "\n";
+				str =  str +  "Product ID: " + rs.getString("product_id");
+				str =  str +  rs.getString("PRODUCT_NAME");
+				str =  str +  rs.getString("QUANTITY");
+				str =  str +  rs.getString("ADDRESS");
+				str =  str +  rs.getString("DELIVERY_DATE ");
+				str =  str +  rs.getString("PHONENUMBER");
+
 				
 			}
 		}

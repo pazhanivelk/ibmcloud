@@ -186,8 +186,8 @@ public class WatsonHelper {
 				String orderStatus = dbUtils.getNextOrderStatus(orderData.get("str"));
 				userDefinedData.put("$finalstatus", orderStatus);
 				if (responseStr != null) {
-					responseStr=responseStr.replace("$finalstatus", "orderStatus" );
-					responseMap.put("response",responseStr);	
+					responseStr=responseStr.replace("$finalstatus", orderStatus );
+					responseMap.put("response",orderStatus);
 				}
 				break;
 		}
