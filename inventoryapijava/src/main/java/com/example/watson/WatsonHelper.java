@@ -67,7 +67,7 @@ public class WatsonHelper {
 		ASSISTANT_ID = aSSISTANT_ID;
 		this.url = url;
 		this.apiKey = apiKey;
-		dbfields = Arrays.asList("order_id","product_id","quantity","order_status","delivery_status","payment_status","delivery_date","email_addr","phonenumber","address","payment_type","card_number","cvv","bank_name","card_type","product_name", "amount");
+		dbfields = Arrays.asList("order_id","product_id","quantity","order_status","delivery_status","payment_status","delivery_date","email_addr","phonenumber","address","cvv","card_type","product_name", "amount");
 		
 	}
 
@@ -183,10 +183,11 @@ public class WatsonHelper {
 				dbUtils.updateOrderData(orderData);
 				break;
 			case "getOrderStatus":
-				String orderStatus = dbUtils.getNextOrderStatus(orderData.get("order_id"));
+				String orderStatus = dbUtils.getNextOrderStatus(orderData.get("str"));
 				userDefinedData.put("$finalstatus", orderStatus);
 				if (responseStr != null) {
-					responseStr.replace("$finalstatus", "orderStatus" );
+					responseStr=responseStr.replace("$finalstatus", "orderStatus" );
+					responseMap.put("response",responseStr);	
 				}
 				break;
 		}
