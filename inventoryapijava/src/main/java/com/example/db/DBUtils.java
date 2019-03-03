@@ -1,5 +1,6 @@
 package com.example.db;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -151,7 +152,7 @@ public class DBUtils {
 		try {
 			conn = getDBConnection();
 			statement = conn.createStatement();
-			rs = statement.executeQuery("select order_id,product_id,product_name,quantity,address,delivery_date,phonenumber from order_details where order_id='" + order_id + "'");
+			rs = statement.executeQuery("select order_id,product_id,product_name,quantity,address,delivery_date,phonenumber from order_details where order_id='" + orderId + "'");
 			if (rs.next()) {
 				a[0]= rs.getString("order_id");
 				a[1]= rs.getString("product_id");
