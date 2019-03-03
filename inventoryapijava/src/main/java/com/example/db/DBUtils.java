@@ -151,14 +151,14 @@ public class DBUtils {
 		try {
 			conn = getDBConnection();
 			statement = conn.createStatement();
-			rs = statement.executeQuery("select ORDER_ID,PRODUCT_ID,PRODUCT_NAME,QUANTITY,ADDRESS,DELIVERY_DATE,PHONENUMBER from order_details where order_id='" + orderId + "'");
+			rs = statement.executeQuery("select ORDER_ID,PRODUCT_ID,PRODUCT_NAME,QUANTITY,ADDRESS,PHONENUMBER from order_details where order_id=" + orderId );
 			if (rs.next()) {
 				str = "Order ID : "  +  rs.getString("ORDER_ID") + "\n";
 				str =  str +  "Product ID: " + rs.getString("product_id");
 				str =  str +  rs.getString("PRODUCT_NAME");
 				str =  str +  rs.getString("QUANTITY");
 				str =  str +  rs.getString("ADDRESS");
-				str =  str +  rs.getString("DELIVERY_DATE ");
+				str =
 				str =  str +  rs.getString("PHONENUMBER");
 
 				

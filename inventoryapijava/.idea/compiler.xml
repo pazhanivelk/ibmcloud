@@ -6,12 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="demo-function" />
-        <module name="demo-function (1)" />
+        <module name="inventoryapi (1)" />
+        <module name="inventoryapi (2)" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="demo-function (2)" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
