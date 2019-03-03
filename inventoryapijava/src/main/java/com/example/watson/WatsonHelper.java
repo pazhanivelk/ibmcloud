@@ -154,10 +154,7 @@ public class WatsonHelper {
 			case  "cancelOrder":
 				orderData.put("order_status", "CANCELLED");
 				userDefinedData.put("finalstatus", "success");
-				if (responseStr != null) {
-					responseStr.replace("$finalstatus", "success" );
-				}
-				dbUtils.updateOrderData(orderData);
+				dbUtils.cancelOrderData(userDefinedData);
 				break;
 			case "returnOrder":
 				orderData.put("order_status", "RETURNED");
@@ -184,13 +181,9 @@ public class WatsonHelper {
 				dbUtils.updateOrderData(orderData);
 				break;
 			case "getOrderStatus":
-
-				String orderStatus = dbUtils.getNextOrderStatus(orderData.get("str"));
-				userDefinedData.put("$finalstatus", orderStatus);
-				if (responseStr != null) {
-					responseStr=responseStr.replace("$finalstatus", orderStatus );
-					responseMap.put("response",orderStatus);
-				}
+				Integer orderIdForStatus =  ((java.lang.Double)userDefinedData.get("order_id")).intValue();
+				String orderStatus = dbUtils.getNextOrderStatus(orderIdForStatus);
+				responseMap.put("response",orderStatus);
 				break;
 		}
 		

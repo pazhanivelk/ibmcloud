@@ -140,7 +140,7 @@ public class DBUtils {
 		return order_id;
 	}
 	
-	public String getNextOrderStatus(String orderId) throws Exception  {
+	public String getNextOrderStatus(Integer orderId) throws Exception  {
 		String str="";
 				
 		Connection conn = null;
@@ -154,14 +154,11 @@ public class DBUtils {
 			rs = statement.executeQuery("select ORDER_ID,PRODUCT_ID,PRODUCT_NAME,QUANTITY,ADDRESS,DELIVERY_DATE,PHONENUMBER from ORDERDETAILS where order_id='" + orderId+"'" );
 			if (rs.next()) {
 				str = "Order ID : "  +  rs.getString("ORDER_ID") + "\n";
-				str =  str +  "Product ID: " + rs.getString("product_id");
-				str =  str +  rs.getString("PRODUCT_NAME");
-				str =  str +  rs.getString("QUANTITY");
-				str =  str +  rs.getString("ADDRESS");
-				str =
-				str =  str +  rs.getString("PHONENUMBER");
-
-				
+				str =  str +  "Product ID: " + rs.getString("product_id") + "\n";
+				str =  str +  "Product Name: " +  rs.getString("PRODUCT_NAME")+ "\n";
+				str =  str +  "QUANTITY :" + rs.getString("QUANTITY") + "\n";
+				str =  str +  "Address :" +  rs.getString("ADDRESS") + "\n";
+				str =  str +  "DELIVERY_DATE: " + rs.getString("DELIVERY_DATE")+"\n";
 			}
 		}
 		catch(Exception ex) {
@@ -219,6 +216,15 @@ public class DBUtils {
 			
 		}
 		sql = sql + " where order_id = '"+orderData.get("order_id") +"' "; 
+		executeUpdateOrInsert(sql);
+		
+	}
+	
+	public void cancelOrderData(Map<String, Object> orderData) throws Exception  {
+		
+		Integer orderId = ((Double)orderData.get("order_id")).intValue();
+		String sql = "update ORDERDETAILS set ORDER_STATUS = 'Cancelled'";
+		sql = sql + " where order_id = '"+orderId +"' "; 
 		executeUpdateOrInsert(sql);
 		
 	}

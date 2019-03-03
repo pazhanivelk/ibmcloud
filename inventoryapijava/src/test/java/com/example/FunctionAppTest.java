@@ -101,29 +101,50 @@ public class FunctionAppTest {
   @Test
   @Ignore
   public void testORderStatus(){
+	  
       Gson gson = new Gson();
       JsonObject args = new JsonObject();
       args.addProperty("input", "Order Status");
       args.addProperty("assistantId", "2131796c-7457-4f05-b07a-d25424297e66");
       args.addProperty("url", "https://gateway.watsonplatform.net/assistant/api/");
       args.addProperty("apikey", "sm2Trx14ybklxGiW-xxH86-EnPEUhGWJxqvjTRUpSjB4");
-
       JsonObject response = FunctionApp.main(args);
-
       System.out.println("response from watson "+gson.toJson(response));
       args.add("messageContext", response.get("context"));
-      args.addProperty("input", "100057");
+      args.addProperty("input", "100063");
       args.addProperty("sessionId", response.get("sessionId").getAsString());
-
       response = FunctionApp.main(args);
       System.out.println("response from watson "+gson.toJson(response));
   }
+  
+  
+  @Test
+  public void testCancelOrder(){
+	  
+      Gson gson = new Gson();
+      JsonObject args = new JsonObject();
+      args.addProperty("input", "Cancel Order");
+      args.addProperty("assistantId", "2131796c-7457-4f05-b07a-d25424297e66");
+      args.addProperty("url", "https://gateway.watsonplatform.net/assistant/api/");
+      args.addProperty("apikey", "sm2Trx14ybklxGiW-xxH86-EnPEUhGWJxqvjTRUpSjB4");
+      JsonObject response = FunctionApp.main(args);
+      System.out.println("response from watson "+gson.toJson(response));
+      args.add("messageContext", response.get("context"));
+      args.addProperty("input", "100063");
+      args.addProperty("sessionId", response.get("sessionId").getAsString());
+      response = FunctionApp.main(args);
+      System.out.println("response from watson "+gson.toJson(response));
+      args.addProperty("input", "Yes");
+	  args.addProperty("sessionId", response.get("sessionId").getAsString());
+	  response = FunctionApp.main(args);
+	  System.out.println("response from watson "+gson.toJson(response));
+	    
+  }
+  
   @Test
   @Ignore
   public void testReturn() {
-
-
-		
+	  
 		Gson gson = new Gson();
 	    JsonObject args = new JsonObject();
 	    args.addProperty("input", "Want to return item");
