@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class DBUtils {
 	
-	public static final String CONNECTION_STRING = "jdbc:db2://dashdb-txn-sbox-yp-dal09-04.services.dal.bluemix.net:50001/BLUDB";
+	public static final String CONNECTION_STRING = "jdbc:db2://dashdb-txn-sbox-yp-dal09-04.services.dal.bluemix.net:50000/BLUDB";
 	public static Connection getDBConnection() throws Exception{
 		
 		 Class.forName("com.ibm.db2.jcc.DB2Driver");
