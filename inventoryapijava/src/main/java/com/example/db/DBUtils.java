@@ -1,31 +1,24 @@
 package com.example.db;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 public class DBUtils {
 	
-	public static final String CONNECTION_STRING = "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB";
+	public static final String CONNECTION_STRING = "jdbc:db2://dashdb-txn-sbox-yp-dal09-04.services.dal.bluemix.net:50001/BLUDB";
 	public static Connection getDBConnection() throws Exception{
 		
 		 Class.forName("com.ibm.db2.jcc.DB2Driver");
 
 		 DriverManager.registerDriver(new com.ibm.db2.jcc.DB2Driver());
-		 Connection con = DriverManager.getConnection(CONNECTION_STRING, "zxv30288", "h9hqhb9hvtc7nf+0");
+		 Connection con = DriverManager.getConnection(CONNECTION_STRING, "rpq33294", "cvtc7xb+vv4253s5");
 
 		 return con;
 

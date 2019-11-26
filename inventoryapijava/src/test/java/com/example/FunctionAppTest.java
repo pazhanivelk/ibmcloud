@@ -29,7 +29,6 @@ import com.google.gson.JsonObject;
  */
 public class FunctionAppTest {
   @Test
-  @Ignore
   public void testFunction() {
 
 	
@@ -99,7 +98,6 @@ public class FunctionAppTest {
 
 
   @Test
-  @Ignore
   public void testORderStatus(){
 	  
       Gson gson = new Gson();
@@ -111,7 +109,7 @@ public class FunctionAppTest {
       JsonObject response = FunctionApp.main(args);
       System.out.println("response from watson "+gson.toJson(response));
       args.add("messageContext", response.get("context"));
-      args.addProperty("input", "100063");
+      args.addProperty("input", "100069");
       args.addProperty("sessionId", response.get("sessionId").getAsString());
       response = FunctionApp.main(args);
       System.out.println("response from watson "+gson.toJson(response));

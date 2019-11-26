@@ -27,10 +27,10 @@ import com.google.gson.JsonParser;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageResponse;
 
 /**
- * Hello FunctionApp use below command to create cloud functions ibmcloud fn
- * action create inventoryapi target/demo-function.jar --main
- * com.example.FunctionApp use below command to update it ibmcloud fn action
- * update inventoryapi target/inventoryapi.jar --main com.example.FunctionApp
+ * Hello FunctionApp use below command to create cloud functions *
+ * ibmcloud fn action create inventoryapi target/inventoryapi.jar --main  com.example.FunctionApp
+ * use below command to update it *
+ * ibmcloud fn action update inventoryapi target/inventoryapi.jar --main com.example.FunctionApp
  */
 public class FunctionApp {
 	public static JsonObject main(JsonObject args) {
